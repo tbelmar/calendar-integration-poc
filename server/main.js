@@ -2,6 +2,10 @@ import { Meteor } from "meteor/meteor";
 import { authenticate } from "@google-cloud/local-auth";
 import { google } from "googleapis";
 import * as path from "path";
+import * as fss from "fs";
+import * as process from "process";
+
+const fs = fss.promises;
 
 // If modifying these scopes, delete token.json.
 const SCOPES = ["https://www.googleapis.com/auth/calendar"];
