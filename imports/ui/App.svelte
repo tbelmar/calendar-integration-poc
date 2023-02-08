@@ -119,7 +119,7 @@
         bind:value={startDate}
         class="datetime-elem cal-field"
         type="date"
-        id="start-time"
+        id="start-date"
       />
       <input
         bind:value={startTime}
@@ -135,13 +135,13 @@
         bind:value={endDate}
         class="datetime-elem cal-field"
         type="date"
-        id="start-date"
+        id="end-date"
       />
       <input
         bind:value={endTime}
         class="datetime-elem cal-field"
         type="time"
-        id="end-date"
+        id="end-time"
       />
     </div>
 
