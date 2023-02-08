@@ -2,3 +2,29 @@ body {
   padding: 10px;
   font-family: sans-serif;
 }
+
+li {
+  list-style: none;
+  display: inline-block;
+}
+ul {
+  display: grid;
+}
+h4,
+ul {
+  margin: 0;
+  padding: 0;
+}
+.cal-form,
+#facilities-list {
+  display: block;
+  margin-bottom: 20px;
+}
+.datetime-elem {
+  display: inline;
+}
+textarea {
+  resize: none;
+  width: 300px;
+  height: 150px;
+}

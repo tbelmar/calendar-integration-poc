@@ -1,26 +1,171 @@
 <script>
   import { Meteor } from "meteor/meteor";
-  let Summary = "";
-  let Location = "";
-  let Description = "";
-  let StartTime = "";
-  let EndTime = "";
-  let Attendee = "";
+  import { Facilities } from "./Facilities";
+  import { createTimeStamps } from "./utils";
 
-  const createCalendar = () => Meteor.call("event.create");
+  $m: selectedFacility = null;
+  let summary = "";
+  $m: location = "";
+  $m: description = "";
+  $m: startTime = "";
+  let endTime = "";
+  $m: startDate = "";
+  let endDate = "";
+  let invitee = "";
+  $m: attendees = [];
+  let facilityChanged = false;
 
+  $m: {
+    if (selectedFacility && facilityChanged) {
+      // auto input a facilities data
+      summary = "Medical Booking";
+      facilityChanged = false;
+      location = selectedFacility.getFullAddress();
+      description = `Thank you for booking through Per Diem: \n\n [Appointment info here]\n\nLocated at ${selectedFacility.getFullAddress()}.\n\nIf you have any questions, reach us at ${
+        selectedFacility.phoneNumber
+      }`;
+    }
+  }
+
+  const setFacility = (name) => {
+    facilityChanged = true;
+    selectedFacility = Facilities.filter((f) => f.name === name)[0];
+    // reset if none is selected
+    if (!selectedFacility) {
+      description = "";
+      location = "";
+      summary = "";
+    }
+  };
+
+  const addAttendee = () => {
+    attendees = [...attendees, { email: invitee }];
+    invitee = "";
+  };
+
+  const removeAttendee = ({ email }) => {
+    attendees = attendees.filter((listItem) => listItem.email !== email);
+  };
+
+  const createCalendar = () => {
+    let timeZone = "America/" + selectedFacility.address.city.replace(" ", "_");
+
+    const { startTimeStamp, endTimeStamp } = createTimeStamps(
+      startTime,
+      endTime,
+      startDate,
+      endDate
+    );
+
+    Meteor.call(
+      "event.create",
+      summary,
+      location,
+      description,
+      startTimeStamp,
+      endTimeStamp,
+      timeZone,
+      attendees
+    );
+  };
 </script>
 
 <div class="container">
-  <h1>Hello :)</h1>
-  <button />
-  <form action="">
-    <input bind:value={Summary} type="text" placeholder="Summary" />
-    <input bind:value={Location} type="text" placeholder="Location" />
-    <input bind:value={Description} type="text" placeholder="Description" />
-    <input bind:value={StartTime} type="time" placeholder="" id="start-time" />
-    <input bind:value={EndTime} type="time" placeholder="" id="end-time" />
-    <input bind:value={Attendee} type="email" placeholder="Attendee" />
+  <h1>Create a Calendar Event</h1>
+
+  <label for="facilities-list">Select a Facility</label>
+  <select
+    on:change={(e) => setFacility(e.target.value)}
+    name="facilities"
+    id="facilities-list"
+  >
+    <option>--</option>
+    {#each Facilities as facility}
+      <option>{facility.name}</option>
+    {/each}
+  </select>
+
+  <form class="cal-form">
+    <label for="summary">Summary:</label>
+    <input
+      bind:value={summary}
+      id="summary"
+      class="cal-form"
+      type="text"
+      placeholder="Summary..."
+    />
+
+    <label for="location">Location:</label>
+    <input
+      bind:value={location}
+      id="location"
+      class="cal-form"
+      type="text"
+      placeholder="Location..."
+    />
+
+    <label for="description">Description:</label>
+    <textarea
+      bind:value={description}
+      id="description"
+      class="cal-form"
+      type="text"
+      placeholder="Description..."
+    />
+
+    <label for="start-time">Start of Event</label>
+    <div>
+      <input
+        bind:value={startDate}
+        class="datetime-elem cal-form"
+        type="date"
+        id="start-time"
+      />
+      <input
+        bind:value={startTime}
+        class="datetime-elem cal-form"
+        type="time"
+        id="start-time"
+      />
+    </div>
+
+    <label for="end-time">End of Event</label>
+    <div>
+      <input
+        bind:value={endDate}
+        class="datetime-elem cal-form"
+        type="date"
+        id="start-date"
+      />
+      <input
+        bind:value={endTime}
+        class="datetime-elem cal-form"
+        type="time"
+        id="end-date"
+      />
+    </div>
+
+    <ul>
+      <h4>Attendees:</h4>
+      {#each attendees as attendee}
+        <span>
+          <li>{attendee.email}</li>
+          <button on:click|preventDefault={() => removeAttendee(attendee)}
+            >-</button
+          >
+        </span>
+      {/each}
+    </ul>
+
+    <span>
+      <input
+        bind:value={invitee}
+        type="text"
+        id="email"
+        placeholder="Add Attendee"
+      />
+      <button on:click|preventDefault={addAttendee}>+</button>
+    </span>
   </form>
-  <button on:click={createCalendar}>Create Event</button>
+  <button on:click={createCalendar} type="button">Create Event</button>
 </div>
