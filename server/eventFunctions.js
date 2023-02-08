@@ -11,7 +11,7 @@ Meteor.methods({
       description,
       'start': {
         'dateTime': startTimeStamp,
-        timeZone, // how should we default this?.. Can't just remove. Added a facility obj
+        timeZone,
       },
       'end': {
         'dateTime': endTimeStamp,

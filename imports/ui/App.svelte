@@ -1,6 +1,6 @@
 <script>
   import { Meteor } from "meteor/meteor";
-  import { Facilities } from "./Facilities";
+  import { Facilities } from "./facilitiesData";
   import { createTimeStamps } from "./utils";
 
   $m: selectedFacility = null;
@@ -85,12 +85,12 @@
     {/each}
   </select>
 
-  <form class="cal-form">
+  <form class="cal-field">
     <label for="summary">Summary:</label>
     <input
       bind:value={summary}
       id="summary"
-      class="cal-form"
+      class="cal-field"
       type="text"
       placeholder="Summary..."
     />
@@ -99,7 +99,7 @@
     <input
       bind:value={location}
       id="location"
-      class="cal-form"
+      class="cal-field"
       type="text"
       placeholder="Location..."
     />
@@ -108,7 +108,7 @@
     <textarea
       bind:value={description}
       id="description"
-      class="cal-form"
+      class="cal-field"
       type="text"
       placeholder="Description..."
     />
@@ -117,13 +117,13 @@
     <div>
       <input
         bind:value={startDate}
-        class="datetime-elem cal-form"
+        class="datetime-elem cal-field"
         type="date"
         id="start-time"
       />
       <input
         bind:value={startTime}
-        class="datetime-elem cal-form"
+        class="datetime-elem cal-field"
         type="time"
         id="start-time"
       />
@@ -133,13 +133,13 @@
     <div>
       <input
         bind:value={endDate}
-        class="datetime-elem cal-form"
+        class="datetime-elem cal-field"
         type="date"
         id="start-date"
       />
       <input
         bind:value={endTime}
-        class="datetime-elem cal-form"
+        class="datetime-elem cal-field"
         type="time"
         id="end-date"
       />
