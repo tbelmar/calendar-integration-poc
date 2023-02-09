@@ -30,7 +30,7 @@ export const createTimeStamps = (startTime, endTime, startDate, endDate) => {
     startDateDay,
     startTimeHr,
     startTimeMin
-  ).toISOString();
+  ).toJSON();
   endTimeStamp = new Date(
     endDateYr,
     endDateMon,
