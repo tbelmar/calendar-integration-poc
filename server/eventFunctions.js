@@ -33,7 +33,7 @@ Meteor.methods({
         if (err) {
           console.log('There was an error contacting the Calendar service: ' + err);
         }
-        console.log('Event created: %s', event.htmlLink);
+        console.log('Event created: %s', event.data.htmlLink);
       });
     });
 
