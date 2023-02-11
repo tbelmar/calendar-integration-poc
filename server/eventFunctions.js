@@ -1,41 +1,56 @@
 import { Meteor } from "meteor/meteor";
 import { google } from "googleapis";
 import { authorize } from "./authentication";
+import { emailInvitee } from "./nodemailer";
 
 Meteor.methods({
-  "event.create"(summary, location, description, startTimeStamp, endTimeStamp, timeZone, attendees) {
+  async "event.create"(summary, location, description, startTimeStamp, endTimeStamp, timeZone, attendees) {
+    try {
+      const event = {
+        summary,
+        location,
+        description,
+        'start': {
+          'dateTime': startTimeStamp,
+          timeZone,
+        },
+        'end': {
+          'dateTime': endTimeStamp,
+          timeZone,
+        },
+        attendees,
+        'reminders': {
+          'useDefault': false,
+        },
+      };
 
-    const event = {
-      summary,
-      location,
-      description,
-      'start': {
-        'dateTime': startTimeStamp,
-        timeZone,
-      },
-      'end': {
-        'dateTime': endTimeStamp,
-        timeZone,
-      },
-      attendees,
-      'reminders': {
-        'useDefault': false,
-      },
-    };
-
-    authorize().then(auth => {
+      const auth = await authorize();
       const calendar = google.calendar({ version: "v3", auth });
-      calendar.events.insert({
+      const res = await calendar.events.insert({
         auth: auth,
         calendarId: 'primary',
         resource: event,
-      }, function (err, event) {
-        if (err) {
-          console.log('There was an error contacting the Calendar service: ' + err);
-        }
-        console.log('Event created: %s', event.data.htmlLink);
       });
-    });
+      emailInvitee(summary, location, description, startTimeStamp, endTimeStamp, timeZone, attendees)
+      return res.data.htmlLink;
+    } catch (error) {
+      throw new Meteor.Error('Error contacting the Calendar service: ' + error);
+    }
+  }
+});
+    // authorize().then(auth => {
+    //   const calendar = google.calendar({ version: "v3", auth });
+    //   calendar.events.insert({
+    //     auth: auth,
+    //     calendarId: 'primary',
+    //     resource: event,
+    //   }, function (err, event) {
+    //     if (err) {
+    //       console.log('There was an error contacting the Calendar service: ' + err);
+    //     }
+    //     console.log('Event created: %s', event.data.htmlLink);
+    //   });
+    // });
 
     //   const event = {
     //     'summary': 'Moment of truth',
@@ -56,5 +71,3 @@ Meteor.methods({
     //         'useDefault': false,
     //     },
     // };
-  }
-});

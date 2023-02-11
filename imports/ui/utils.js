@@ -1,4 +1,6 @@
+import { Meteor } from 'meteor/meteor';
 export const createTimeStamps = (startTime, endTime, startDate, endDate) => {
+  try {
 
   // parse the input time & date
   const startTimeHr = startTime.slice(0, 2);
@@ -40,4 +42,8 @@ export const createTimeStamps = (startTime, endTime, startDate, endDate) => {
   ).toISOString();
 
   return { startTimeStamp, endTimeStamp };
+
+} catch (error) {
+  throw new Meteor.Error('Error in parsing dateTime: ', error);
+}
 };

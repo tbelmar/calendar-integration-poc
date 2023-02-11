@@ -48,27 +48,33 @@
     attendees = attendees.filter((listItem) => listItem.email !== email);
   };
 
-  const createCalendar = () => {
-    let timeZone =
-      "America/" + selectedFacility.address.city.replace(/([" "])/g, "_");
+  const createCalendar = async () => {
+    try {
+      let timeZone =
+        "America/" + selectedFacility.address.city.replace(/([" "])/g, "_");
 
-    const { startTimeStamp, endTimeStamp } = createTimeStamps(
-      startTime,
-      endTime,
-      startDate,
-      endDate
-    );
+      const { startTimeStamp, endTimeStamp } = createTimeStamps(
+        startTime,
+        endTime,
+        startDate,
+        endDate
+      );
 
-    Meteor.call(
-      "event.create",
-      summary,
-      location,
-      description,
-      startTimeStamp,
-      endTimeStamp,
-      timeZone,
-      attendees
-    );
+      const eventLink = await Meteor.callAsync(
+        "event.create",
+        summary,
+        location,
+        description,
+        startTimeStamp,
+        endTimeStamp,
+        timeZone,
+        attendees
+      );
+      
+      if (eventLink) window.open(eventLink);
+    } catch (error) {
+      alert("Error creating event");
+    }
   };
 </script>
 
