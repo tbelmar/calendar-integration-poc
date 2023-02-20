@@ -58,10 +58,13 @@ export async function authorize() {
   if (client) {
     return client;
   }
+  
+  console.log('made it here')
   client = await authenticate({
     scopes: SCOPES,
     keyfilePath: CREDENTIALS_PATH,
   });
+  console.log('Not here')
   if (client.credentials) {
     await saveCredentials(client);
   }

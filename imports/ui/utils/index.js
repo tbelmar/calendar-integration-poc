@@ -1,4 +1,6 @@
 import { Meteor } from 'meteor/meteor';
+import * as qs from "qs";
+
 export const createTimeStamps = (startTime, endTime, startDate, endDate) => {
   try {
 
@@ -32,14 +34,14 @@ export const createTimeStamps = (startTime, endTime, startDate, endDate) => {
     startDateDay,
     startTimeHr,
     startTimeMin
-  ).toJSON();
+  );
   endTimeStamp = new Date(
     endDateYr,
     endDateMon,
     endDateDay,
     endTimeHr,
     endTimeMin
-  ).toISOString();
+  );
 
   return { startTimeStamp, endTimeStamp };
 
@@ -47,3 +49,56 @@ export const createTimeStamps = (startTime, endTime, startDate, endDate) => {
   throw new Meteor.Error('Error in parsing dateTime: ', error);
 }
 };
+
+
+export const createEventLinks = (startTimeStamp, endTimeStamp, location, description, summary) => {
+
+  const googleObj = {
+    action: "TEMPLATE",
+    dates:
+      startTimeStamp.replace(/([-:.])/g, "") +
+      "/" +
+      endTimeStamp.replace(/([-:.])/g, ""),
+    details: description,
+    location,
+    text: summary,
+  };
+
+  // create google link
+  const googleLink =
+    "https://calendar.google.com/calendar/render?" +
+    qs.stringify(googleObj);
+
+  const outlookObj = {
+    body: description,
+    enddt: endTimeStamp.replace(/([.])/g, ""),
+    location,
+    path: "/calendar/action/compose",
+    rru: "addevent",
+    startdt: startTimeStamp.replace(/([.])/g, ""),
+    subject: summary,
+    allday: false,
+  };
+  // create outlook link
+  const outlookLink =
+    "https://outlook.live.com/calendar/0/deeplink/compose?" +
+    qs.stringify(outlookObj);
+
+  return { googleLink, outlookLink };
+};
+
+const months = {
+  "1": "J A N",
+  "2": "F E B",
+  "3": "M A R",
+  "4": "A P R",
+  "5": "M A Y",
+  "6": "J U N",
+  "7": "J U L",
+  "8": "A U G",
+  "9": "S E P",
+  "10": "O C T",
+  "11": "N O V",
+  "12": "D E C",
+};
+export const getMonthString = (timeStamp) => months[timeStamp.getMonth() + 1];

@@ -1,7 +1,9 @@
 <script>
-  import { Facilities } from "./facilitiesData";
+  import { Facilities } from "./utils/facilitiesData";
   import { createTimeStamps } from "./utils";
   import * as qs from "qs";
+
+  // console.log("Error Response: ", qs.parse('refresh_token=1%2F%2F06FGBqARp6BL4CgYIARAAGAYSNgF-L9IrkRqNfCKhU_XaVBgCRfjF3LaPKCDcHMOVS12GUU_OIP0yDUvF0qKebAA-PBsY8H_wDw&client_id=1071390240354-h2qj0tkgp5omhduvicda8s8r6165cmgv.apps.googleusercontent.com&client_secret=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&grant_type=refresh_token'))
 
   /**
    * Problem:
@@ -175,5 +177,42 @@
     on:click={() => console.log(outlookLink)}
     class="addToCalendar">Add to Outlook Calendar</a
   >
-  {outlookLink}
+
+  <br />
+  Google:{googleLink}
+
+  <br />
+  Outlook:{outlookLink}
+
+  <div>
+    <a href={googleLink} rel="noreferrer" target="_blank" class="addToCalendar"
+      >Add to Google Calendar</a
+    >
+    <a href={outlookLink} rel="noreferrer" target="_blank" class="addToCalendar"
+      >Add to Outlook Calendar</a
+    >
+    <style>
+      .addToCalendar {
+        background-color: #44c767;
+        border: 1px solid #18ab29;
+        display: inline-block;
+        cursor: pointer;
+        color: #ffffff;
+        font-family: Arial;
+        font-size: 16px;
+        padding: 16px 31px;
+        text-decoration: none;
+        text-shadow: 0px 1px 0px #2f6627;
+      }
+
+      .addToCalendar:hover {
+        background-color: #5cbf2a;
+      }
+
+      .addToCalendar:active {
+        position: relative;
+        top: 1px;
+      }
+    </style>
+  </div>
 </div>

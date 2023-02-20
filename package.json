@@ -3,6 +3,7 @@
   "private": true,
   "scripts": {
     "start": "meteor run",
+    "auth": "meteor --port 5500",
     "test": "meteor test --once --driver-package meteortesting:mocha",
     "test-app": "TEST_WATCH=1 meteor test --full-app --driver-package meteortesting:mocha",
     "visualize": "meteor --production --extra-packages bundle-visualizer"
@@ -15,6 +16,7 @@
     "ical-generator": "^3.6.1",
     "meteor-node-stubs": "^1.2.5",
     "nodemailer": "^6.9.1",
+    "postmark": "^3.0.15",
     "qs": "^6.11.0",
     "svelte": "^3.54.0"
   },

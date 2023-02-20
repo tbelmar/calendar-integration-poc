@@ -4,7 +4,7 @@ import { authorize } from "./authentication";
 import { emailInvitee } from "./nodemailer";
 
 Meteor.methods({
-  async "event.create"(summary, location, description, startTimeStamp, endTimeStamp, timeZone, attendees) {
+  async "event.create"(summary, location, description, startTimeStamp, endTimeStamp, timeZone, attendees, htmlData) {
     try {
       const event = {
         summary,
@@ -31,26 +31,24 @@ Meteor.methods({
         calendarId: 'primary',
         resource: event,
       });
-      emailInvitee(summary, location, description, startTimeStamp, endTimeStamp, timeZone, attendees)
+      emailInvitee(summary, location, description, startTimeStamp, endTimeStamp, attendees, htmlData)
       return res.data.htmlLink;
     } catch (error) {
-      throw new Meteor.Error('Error contacting the Calendar service: ' + error);
+      console.log("Error in event.create: ", error);
+      throw new Meteor.Error('Error contacting the Calendar service: ', error);
     }
-  }
+  },
+
+  async "event.email"(summary, location, description, startTimeStamp, endTimeStamp, attendees, htmlData) {
+    try {
+      emailInvitee(summary, location, description, startTimeStamp, endTimeStamp, attendees, htmlData);
+      return 'Success';
+    } catch (error) {
+      console.log("Error in event.email: ", error);
+      throw new Meteor.Error('Error emailing the invitee: ', error);
+    }
+  },
 });
-    // authorize().then(auth => {
-    //   const calendar = google.calendar({ version: "v3", auth });
-    //   calendar.events.insert({
-    //     auth: auth,
-    //     calendarId: 'primary',
-    //     resource: event,
-    //   }, function (err, event) {
-    //     if (err) {
-    //       console.log('There was an error contacting the Calendar service: ' + err);
-    //     }
-    //     console.log('Event created: %s', event.data.htmlLink);
-    //   });
-    // });
 
     //   const event = {
     //     'summary': 'Moment of truth',

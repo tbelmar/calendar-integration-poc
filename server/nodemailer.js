@@ -10,11 +10,15 @@
 import { createTransport } from 'nodemailer';
 import { Meteor } from 'meteor/meteor';
 import ical from 'ical-generator';
+import { createHTML } from './createHTML';
+// import * as fss from "fs";
 
-const FILL_ME_IN = null;
+// const fs = fss.promises;
+// const content = await fs.readFile(TOKEN_PATH);
+// const FILL_ME_IN = null;
 const Email = ""
 const Pass = ""
-const Service = "Outlook365";
+const Service = "";
 
 
 const createICSFile = async (start, end, title, description, location) => {
@@ -48,23 +52,19 @@ const createICSFile = async (start, end, title, description, location) => {
     }
   ]);
   const path = eventObj.id + '.ics';
-  // const path = __dirname + '/uploads/' + eventObj.id + '.ics';
-  // console.log('path1: ', path);
   await cal.save(path);
-  // console.log('saved: ', path);
   return path;
 } catch (error) {
   throw new Meteor.Error('Error generating .ICS file: ', error);
 }
 };
 
-export const emailInvitee = async (summary, location, description, startTimeStamp, endTimeStamp, timeZone, attendees) => {
+export const emailInvitee = async (summary, location, description, startTimeStamp, endTimeStamp, attendees, htmlData) => {
   try {
     const path = await createICSFile(startTimeStamp, endTimeStamp, summary, description, location);
-    console.log(attendees);
     const invitee = attendees[0].email;
-    console.log('path2: ', path);
 
+    const html = createHTML(htmlData);
     const transporter = await createTransport({
       service: Service,
       auth: {
@@ -77,17 +77,14 @@ export const emailInvitee = async (summary, location, description, startTimeStam
       from: Email,
       to: invitee,
       subject: "Invite to " + summary,
-      html: `
-      <html>
-        <h1>hello ${invitee}</h1>
-        <button>Add to Calendar</button>
-      </html>`,
-      // text: "To add to Apple Calendar, download the .ics file and add to iCalendar.",
+      html,
+      text: "To add to Apple Calendar, download the .ics file and add to iCalendar.",
       attachments: [{ path }],
     };
 
-    await transporter.sendMail(mailObj, function (err, info) {
+    const res = await transporter.sendMail(mailObj, function (err, info) {
       console.log(err, info);
+      return 'Success';
     });
   } catch (error) {
     throw new Meteor.Error('Error sending email: ', error)
