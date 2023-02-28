@@ -1,6 +1,6 @@
 <script>
   import { Meteor } from "meteor/meteor";
-  import { Facilities } from "./utils/facilitiesDataesData";
+  import { Facilities } from "./utils/facilitiesData";
   import { createEventLinks, createTimeStamps, getMonthString } from "./utils";
   // import * as qs from "qs";
 
@@ -50,8 +50,6 @@
     attendees = attendees.filter((listItem) => listItem.email !== email);
   };
 
-  // const createEventLinks = () => {}; // export to util
-
   const createCalendar = async () => {
     try {
       let timeZone =
@@ -64,32 +62,45 @@
         endDate
       );
 
-      // const links = createEventLinks(startTimeStamp, endTimeStamp, location, description, summary);
+      const startTimeStampStr = startTimeStamp.toISOString();
+      const endTimeStampStr = endTimeStamp.toISOString();
+      const links = createEventLinks(
+        startTimeStampStr,
+        endTimeStampStr,
+        location,
+        description,
+        summary
+      );
 
-      // const html = createEmailHTML(googleLink, outlookLink);
+      const htmlData = {
+        inviteTitle: "Calendar Event",
+        inviteText: "Get ready for " + summary,
+        inviteMonth: getMonthString(startTimeStamp),
+        inviteDayOfMonth: startTimeStamp.getDate(),
+        ...links,
+      };
 
+      const eventLink = await Meteor.callAsync(
+        "event.create",
+        summary,
+        location,
+        description,
+        startTimeStamp,
+        endTimeStamp,
+        timeZone,
+        attendees,
+        htmlData
+      );
 
-      // const eventLink = await Meteor.callAsync(
-      //   "event.create",
-      //   summary,
-      //   location,
-      //   description,
-      //   startTimeStamp,
-      //   endTimeStamp,
-      //   timeZone,
-      //   attendees,
-      //   links
-      // );
-
-      // if (eventLink) window.open(eventLink);
+      if (eventLink) window.open(eventLink);
     } catch (error) {
       alert("Error creating event");
     }
   };
 
+  
   const emailEvent = async () => {
     try {
-
       const { startTimeStamp, endTimeStamp } = createTimeStamps(
         startTime,
         endTime,
@@ -99,15 +110,21 @@
 
       const startTimeStampStr = startTimeStamp.toISOString();
       const endTimeStampStr = endTimeStamp.toISOString();
-      
-      const links = createEventLinks(startTimeStampStr, endTimeStampStr, location, description, summary);
+
+      const links = createEventLinks(
+        startTimeStampStr,
+        endTimeStampStr,
+        location,
+        description,
+        summary
+      );
 
       const htmlData = {
         inviteTitle: "Calendar Event",
         inviteText: "Get ready for " + summary,
         inviteMonth: getMonthString(startTimeStamp),
         inviteDayOfMonth: startTimeStamp.getDate(),
-        ...links
+        ...links,
       };
 
       const eventLink = await Meteor.callAsync(
@@ -121,7 +138,7 @@
         htmlData
       );
 
-      if (eventLink) alert('Successfully Sent');
+      if (eventLink) alert("Successfully Sent");
     } catch (error) {
       alert("Error creating event: ", error);
     }

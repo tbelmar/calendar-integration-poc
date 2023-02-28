@@ -97,7 +97,7 @@
   <select
     on:change={(e) => setFacility(e.target.value)}
     name="facilities"
-    id="facilities-list"
+    id="facilities-list:3000"
   >
     <option>--</option>
     {#each Facilities as facility}

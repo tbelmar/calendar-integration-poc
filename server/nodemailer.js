@@ -4,21 +4,25 @@
  * Notable issues:
  *
  *  - Using gmail: https://nodemailer.com/usage/using-gmail/
- * 
+ *
 */
 
 import { createTransport } from 'nodemailer';
 import { Meteor } from 'meteor/meteor';
 import ical from 'ical-generator';
 import { createHTML } from './createHTML';
-// import * as fss from "fs";
+import * as fss from "fs";
+import * as path from "path";
+const fs = fss.promises;
 
-// const fs = fss.promises;
+// const TOKEN_PATH = path.join(process.env.PWD, ".config.json");
 // const content = await fs.readFile(TOKEN_PATH);
-// const FILL_ME_IN = null;
-const Email = ""
-const Pass = ""
-const Service = "";
+
+const FILL_ME_IN = null;
+
+const Email = FILL_ME_IN
+const Pass = FILL_ME_IN
+const Service = FILL_ME_IN
 
 
 const createICSFile = async (start, end, title, description, location) => {
