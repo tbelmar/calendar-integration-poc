@@ -1,2 +1,7 @@
 node_modules/
 .config.json
+.env
+token.json
+tomas_credentials.json
+tomas_token.json
+credentials.json

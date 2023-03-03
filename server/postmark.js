@@ -8,14 +8,11 @@
 import { Meteor } from "meteor/meteor";
 import ical from "ical-generator";
 import * as postmark from "postmark";
+import { createHTML } from "./createHTML";
+import * as fs from "fs";
 
-const FILL_ME_IN = null;
-const POSTMARK_TOKEN = "";
-const Email = "daurham95@live.com";
-const Pass = "Bentley1279";
-const Service = "Outlook365";
 
-const createICSFile = async (start, end, title, description, location) => {
+const createICSFile = async (start, end, title, description, location, SERVICE_EMAIL) => {
   try {
     const eventObj = {
       start,
@@ -23,7 +20,7 @@ const createICSFile = async (start, end, title, description, location) => {
       title,
       description,
       id: "invite", //Some unique identifier
-      owner: { name: "ActualFood", email: Email },
+      owner: { name: "ActualFood", email: SERVICE_EMAIL },
       location,
     };
 
@@ -46,10 +43,7 @@ const createICSFile = async (start, end, title, description, location) => {
       },
     ]);
     const path = eventObj.id + ".ics";
-    // const path = __dirname + '/uploads/' + eventObj.id + '.ics';
-    // console.log('path1: ', path);
     await cal.save(path);
-    // console.log('saved: ', path);
     return path;
   } catch (error) {
     throw new Meteor.Error("Error generating .ICS file: ", error);
@@ -57,27 +51,29 @@ const createICSFile = async (start, end, title, description, location) => {
 };
 
 
-export const emailInvitee = async (summary, location, description, startTimeStamp, endTimeStamp, timeZone, attendees, html) => {
+export const emailInvitee = async (summary, location, description, startTimeStamp, endTimeStamp, attendees, htmlData, SERVICE_EMAIL, POSTMARK_TOKEN) => {
   try {
-    const path = await createICSFile(startTimeStamp, endTimeStamp, summary, description, location);
-    const invitee = attendees[0].email;
+    const path = await createICSFile(startTimeStamp, endTimeStamp, summary, description, location, SERVICE_EMAIL);
 
-    // Send an email:
     const client = new postmark.ServerClient(POSTMARK_TOKEN);
 
-    const res = await client.sendEmail({
-      From: Email,
-      To: invitee,
-      Subject: "Calendar Invite for " + summary,
-      TextBody: "Hello from Postmark!",
-      HtmlBody: html,
-      Attachments: [
-        {
-          name: "invite.ics",
-          Content: path, // Not sure if correct
-          ContentType: "text/calendar",
-        }
-      ],
+    const html = createHTML(htmlData);
+
+    attendees.forEach(async ({ email }) => {
+      const res = await client.sendEmail({
+        From: SERVICE_EMAIL,
+        To: email,
+        Subject: "Calendar Invite for " + summary,
+        TextBody: "Hello from Postmark!",
+        HtmlBody: html,
+        Attachments: [
+          {
+            name: "invite.ics",
+            Content: fs.readFileSync(path).toString('base64'), // Not sure if correct
+            ContentType: "text/calendar",
+          }
+        ],
+      });
     });
   } catch (error) {
     throw new Meteor.Error('Error sending email: ', error)

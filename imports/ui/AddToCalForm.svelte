@@ -11,20 +11,20 @@
    *
    * Devils Advocate: Since they're making the event themselves, they're responsible for verifying the right information?
    */
-  $m: selectedFacility = null;
+  let selectedFacility = null;
   let summary = "";
-  $m: location = "";
-  $m: description = "";
-  $m: startTime = "";
+  let location = "";
+  let description = "";
+  let startTime = "";
   let endTime = "";
-  $m: startDate = "";
+  let startDate = "";
   let endDate = "";
-  $m: attendees = [];
+  // let attendees = [];
   let facilityChanged = false;
-  $m: googleLink = "";
-  $m: outlookLink = "";
-  $m: startTimeStamp = "";
-  $m: endTimeStamp = ":";
+  let googleLink = "";
+  let outlookLink = "";
+  let startTimeStamp = "";
+  let endTimeStamp = "";
   let disableButton = true;
 
   $m: {
@@ -37,21 +37,22 @@
         selectedFacility.phoneNumber
       }`;
     }
-    if ((startTime, endTime, startDate, endDate)) {
+    if (startTime && endTime && startDate && endDate) {
       const res = createTimeStamps(startTime, endTime, startDate, endDate);
       startTimeStamp = res.startTimeStamp;
       endTimeStamp = res.endTimeStamp;
     }
 
     // When all the fields are filled, create the links.
-    if ((startTimeStamp, endTimeStamp, location, description, summary)) {
+    if (startTimeStamp && endTimeStamp && location && description && summary) {
+      console.log(String(startTime), String(endTime), String(startDate), String(endDate));
       disableButton = false;
       const googleObj = {
         action: "TEMPLATE",
         dates:
-          startTimeStamp.replace(/([-:.])/g, "") +
+          startTimeStamp.toISOString().replace(/([-:.])/g, "") +
           "/" +
-          endTimeStamp.replace(/([-:.])/g, ""),
+          endTimeStamp.toISOString().replace(/([-:.])/g, ""),
         details: description,
         location,
         text: summary,
@@ -64,11 +65,11 @@
 
       const outlookObj = {
         body: description,
-        enddt: endTimeStamp.replace(/([.])/g, ""),
+        enddt: endTimeStamp.toISOString().replace(/([.])/g, ""),
         location,
         path: "/calendar/action/compose",
         rru: "addevent",
-        startdt: startTimeStamp.replace(/([.])/g, ""),
+        startdt: startTimeStamp.toISOString().replace(/([.])/g, ""),
         subject: summary,
       };
       // create outlook link

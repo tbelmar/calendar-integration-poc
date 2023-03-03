@@ -12,13 +12,18 @@
     "@babel/runtime": "^7.20.6",
     "@google-cloud/local-auth": "^2.1.0",
     "@types/nodemailer": "^6.4.7",
+    "dotenv": "^16.0.3",
     "googleapis": "^105.0.0",
     "ical-generator": "^3.6.1",
     "meteor-node-stubs": "^1.2.5",
+    "moment-timezone": "^0.5.41",
     "nodemailer": "^6.9.1",
     "postmark": "^3.0.15",
     "qs": "^6.11.0",
-    "svelte": "^3.54.0"
+    "svelte": "^3.54.0",
+    "zip-to-timezone": "^1.1.5",
+    "zip2tz": "^1.0.8",
+    "zipcode-to-timezone": "^0.0.9"
   },
   "devDependencies": {
     "@types/node": "^18.13.0",

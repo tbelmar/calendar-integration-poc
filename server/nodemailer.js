@@ -20,7 +20,7 @@ const fs = fss.promises;
 
 const FILL_ME_IN = null;
 
-const Email = FILL_ME_IN
+const ServiceEmail = FILL_ME_IN
 const Pass = FILL_ME_IN
 const Service = FILL_ME_IN
 
@@ -33,7 +33,7 @@ const createICSFile = async (start, end, title, description, location) => {
     title,
     description,
     id: 'invite', //Some unique identifier
-    owner: { 'name': 'ActualFood', 'email': Email },
+    owner: { 'name': 'ActualFood', 'email': ServiceEmail },
     location,
   }
 
@@ -72,13 +72,13 @@ export const emailInvitee = async (summary, location, description, startTimeStam
     const transporter = await createTransport({
       service: Service,
       auth: {
-        user: Email,
+        user: ServiceEmail,
         pass: Pass
       }
     });
 
     const mailObj = {
-      from: Email,
+      from: ServiceEmail,
       to: invitee,
       subject: "Invite to " + summary,
       html,

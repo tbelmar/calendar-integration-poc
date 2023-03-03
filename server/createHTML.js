@@ -10,6 +10,7 @@
 export const createHTML = ({
   googleLink,
   outlookLink,
+  icalLink,
   inviteTitle,
   inviteText,
   inviteMonth,
@@ -37,7 +38,7 @@ export const createHTML = ({
   <meta name="supported-color-schemes" content="light dark only">
     <!--[if (gte mso 9)|(IE)]><!-->
     <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet"> 
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
     <!--<![endif]-->
 
 
@@ -173,7 +174,7 @@ export const createHTML = ({
       display: none;
     }
 
-    
+
   </style>
 
   <!--mobile styles-->
@@ -184,10 +185,10 @@ export const createHTML = ({
         .wFull { width: 100% !important; }
         .desktop { width: 0 !important; display: none !important; }
         .mobile { display: block !important; }
-        .bgImg { background-size: 100% 100% !important; } 
+        .bgImg { background-size: 100% 100% !important; }
     }
   </style>
-    
+
     <!--default styles-->
     <style>
         .gmail-show { display: none !important; }
@@ -196,7 +197,7 @@ export const createHTML = ({
         .default-hide { display: none !important; mso-hide: all; }
         .default-line { display: none !important; mso-hide: all; }
     </style>
-    
+
     <!--gmail styles-->
     <style>
         u + .body .gmail-show { display: inline-block !important; }
@@ -205,7 +206,7 @@ export const createHTML = ({
         u + .body .default-hide { display: inline-block !important; }
         u + .body .default-line { display: inline-block !important; }
     </style>
-    
+
     <!--owa styles-->
     <style>
     [class~="x_outlook-show"] { display: inline-block !important; }
@@ -213,7 +214,7 @@ export const createHTML = ({
     [class~="x_default"] { display: none !important; }
     [class~="x_default-hide"] { display: inline-block !important; }
     </style>
-    
+
     <!--yahoo styles-->
     <style>
     .& .yahoo-show { display: inline-block !important }
@@ -254,7 +255,7 @@ export const createHTML = ({
       .darkmode2 {
         background-color: #1c1c1c !important;
       }
-        
+
         .callout { background-color: #fdfdfd !important; }
         .darkcopy { color: #444444 !important; }
 
@@ -262,12 +263,12 @@ export const createHTML = ({
       h1, h2, p, span, a, b {
         color: #fdfdfd !important;
       }
-        
+
 
       /* Custom Dark Mode Text Link Color */
       .link { color: #91ADD4 !important; }
       .darkmode2 a { color: #fdfdfd !important; }
-      
+
       .cta-border { color: #7EABCE !important; border-bottom: 3px solid #7EABCE !important; }
       .cta-border span { color: #7EABCE !important; }
       .btn-orange span, .btn-yellow span, .btn-tangerine span { color: initial !important; }
@@ -300,7 +301,7 @@ export const createHTML = ({
     [data-ogsc] .darkmode2 {
       background-color: #1c1c1c !important;
     }
-      
+
       [data-ogsc] .callout { background-color: #fdfdfd !important; }
     /* Custom Dark Mode Font Colors */
     [data-ogsc] h1, [data-ogsc] h2, [data-ogsc] p, [data-ogsc] span, [data-ogsc] a, [data-ogsc] b {
@@ -309,10 +310,10 @@ export const createHTML = ({
 
     /* Custom Dark Mode Text Link Color */
     [data-ogsc] .link { color: #91ADD4 !important; }
-  
+
     [data-ogsc] .darkmode2 a { color: #fdfdfd !important; }
-        
-      
+
+
     [data-ogsc] .cta-border { color: #7EABCE !important; border-bottom: 3px solid #7EABCE !important; }
     [data-ogsc] .cta-border span { color: #7EABCE !important; }
     [data-ogsc] .btn-orange span, [data-ogsc] .btn-yellow span, [data-ogsc] .btn-tangerine span { color: initial !important; }
@@ -336,7 +337,7 @@ export const createHTML = ({
 <div role="article" aria-roledescription="email" aria-label="email name" lang="en">
   <!--start of email-->
   <table class="darkmode" bgcolor="#ffffff" cellpadding="0" cellspacing="0" border="0" role="presentation" style="width:100%;">
-      
+
       <!--header-->
       <tr>
           <td align="center" valign="top">
@@ -367,7 +368,7 @@ export const createHTML = ({
                           <tr>
                               <td align="center" bgcolor="red" style="padding: 10px; border-radius: 3px 3px 0 0;">
                                   <p style="color: #ffffff; font-family: Helvetica, Arial, sans-serif; font-size: 14px;">
-                                     <strong>${inviteMonth}</strong> 
+                                     <strong>${inviteMonth}</strong>
                                   </p>
                               </td>
                           </tr>
@@ -375,7 +376,7 @@ export const createHTML = ({
                               <td class="callout" align="center" bgcolor="#ffffff" style=" padding: 15px; border-radius: 0 0 3px 3px;">
                                  <p class="darkcopy" style="color: #444444; font-family: Helvetica, Arial, sans-serif; font-size: 48px;">
                                      ${inviteDayOfMonth}
-                                  </p> 
+                                  </p>
                               </td>
                           </tr>
                       </table>
@@ -397,26 +398,22 @@ export const createHTML = ({
                           <tr>
                               <td align="center" valign="top" style="padding-top: 35px;">
                                   <!--default-->
-                                 <a class="default" href="https://campaigns.litmus.com/_email/test/newnewyork.ics" class="cta btn-yellow" style="background-color: #F4D66C; font-size: 18px; font-family: Helvetica, Arial, sans-serif; font-weight:bold; text-decoration: none; padding: 14px 20px; color: #1D2025; border-radius: 5px; display:inline-block; mso-padding-alt:0; box-shadow:0 3px 6px rgba(0,0,0,.2);"><!--[if mso]><i style="letter-spacing: 25px;mso-font-width:-100%;mso-text-raise:30pt">&nbsp;</i><![endif]--><span style="mso-text-raise:15pt;">Add to your Calendar</span><!--[if mso]><i style="letter-spacing: 25px;mso-font-width:-100%">&nbsp;</i><![endif]--></a>
-                                  
+                                 <a class="default" href="${icalLink}" class="cta btn-yellow" style="background-color: #F4D66C; font-size: 18px; font-family: Helvetica, Arial, sans-serif; font-weight:bold; text-decoration: none; padding: 14px 20px; color: #1D2025; border-radius: 5px; display:inline-block; mso-padding-alt:0; box-shadow:0 3px 6px rgba(0,0,0,.2);"><!--[if mso]><i style="letter-spacing: 25px;mso-font-width:-100%;mso-text-raise:30pt">&nbsp;</i><![endif]--><span style="mso-text-raise:15pt;">Add to your Calendar</span><!--[if mso]><i style="letter-spacing: 25px;mso-font-width:-100%">&nbsp;</i><![endif]--></a>
+
                                   <!--[if (gte mso 9)|(IE)]><!-->
                                   <a class="gmail-show" href="${googleLink}" class="cta btn-yellow" style="background-color: #F4D66C; font-size: 18px; font-family: Helvetica, Arial, sans-serif; font-weight:bold; text-decoration: none; padding: 14px 20px; color: #1D2025; border-radius: 5px; display:inline-block; mso-padding-alt:0; box-shadow:0 3px 6px rgba(0,0,0,.2);"><span style="mso-text-raise:15pt;">Add to your Google Calendar</span></a>
-                                  
+
                                   <a class="outlook-show" href="${outlookLink}" class="cta btn-yellow" style="background-color: #F4D66C; font-size: 18px; font-family: Helvetica, Arial, sans-serif; font-weight:bold; text-decoration: none; padding: 14px 20px; color: #1D2025; border-radius: 5px; display:inline-block; mso-padding-alt:0; box-shadow:0 3px 6px rgba(0,0,0,.2);"><span style="mso-text-raise:15pt;">Add to your Outlook Calendar</span></a>
-                                  
-                                  <a href="https://calendar.aol.com/?desc=Learn%20all%20about%20the%20rules%20of%20the%20Motorway%20and%20how%20to%20access%20the%20fast%20lane.%0A%0Ahttps%3A%2F%2Fen.wikipedia.org%2Fwiki%2FGridlock_%28Doctor_Who%29&dur=&et=20220112T190000Z&in_loc=New%20Earth&st=20220112T170000Z&title=Welcome%20to%20the%20Motorway&v=60" class="yahoo-show cta btn-yellow" style="background-color: #F4D66C; font-size: 18px; font-family: Helvetica, Arial, sans-serif; font-weight:bold; text-decoration: none; padding: 14px 20px; color: #1D2025; border-radius: 5px; display:inline-block; mso-padding-alt:0; box-shadow:0 3px 6px rgba(0,0,0,.2);"><span style="mso-text-raise:15pt;">Add to your AOL Calendar</span></a>&nbsp;&nbsp;
-                                  
-                                  <a href="https://calendar.yahoo.com/?desc=Learn%20all%20about%20the%20rules%20of%20the%20Motorway%20and%20how%20to%20access%20the%20fast%20lane.%0A%0Ahttps%3A%2F%2Fen.wikipedia.org%2Fwiki%2FGridlock_%28Doctor_Who%29&dur=&et=20220112T190000Z&in_loc=New%20Earth&st=20220112T170000Z&title=Welcome%20to%20the%20Motorway&v=60" class="yahoo-show cta btn-yellow" style="background-color: #F4D66C; font-size: 18px; font-family: Helvetica, Arial, sans-serif; font-weight:bold; text-decoration: none; padding: 14px 20px; color: #1D2025; border-radius: 5px; display:inline-block; mso-padding-alt:0; box-shadow:0 3px 6px rgba(0,0,0,.2);"><span style="mso-text-raise:15pt;">Add to your Yahoo Calendar</span></a>
                                   <!--<![endif]-->
                               </td>
                           </tr>
                           <tr>
                               <td align="center" valign="top" style="padding-bottom: 40px;">
                                   <p style="font-family: Helvetica, Arial, sans-serif; color: #fdfdfd; font-size: 18px; line-height: 24px; margin: 20px 0 0 0;">
-                                      <span class="default-hide"><a href="https://campaigns.litmus.com/_email/test/newnewyork.ics" target="_blank" style="color: #fdfdfd; text-decoration: underline;">iCal file</a></span><span class="default-line">&nbsp;|&nbsp;</span><span class="outlook-hide"><a href="https://outlook.office.com/calendar/0/deeplink/compose?body=Learn%20all%20about%20the%20rules%20of%20the%20Motorway%20and%20how%20to%20access%20the%20fast%20lane.%0A%0Ahttps%3A%2F%2Fen.wikipedia.org%2Fwiki%2FGridlock_%28Doctor_Who%29&enddt=2022-01-12T20%3A00%3A00%2B00%3A00&location=New%20Earth&path=%2Fcalendar%2Faction%2Fcompose&rru=addevent&startdt=2022-01-12T18%3A00%3A00%2B00%3A00&subject=Welcome%20to%20the%20Motorway" target="_blank" style="color: #fdfdfd; text-decoration: underline;">Outlook.com</a> | </span><span class="gmail-hide">&nbsp;|&nbsp;<a href="https://calendar.google.com/calendar/render?action=TEMPLATE&dates=20220112T180000Z%2F20220112T200000Z&details=Learn%20all%20about%20the%20rules%20of%20the%20Motorway%20and%20how%20to%20access%20the%20fast%20lane.%0A%0Ahttps%3A%2F%2Fen.wikipedia.org%2Fwiki%2FGridlock_%28Doctor_Who%29&location=New%20Earth&text=Welcome%20to%20the%20Motorway" target="_blank" style="color: #fdfdfd; text-decoration: underline;">Google</a></span><span class="yahoo-hide">&nbsp;|&nbsp;<a href="https://calendar.aol.com/?desc=Learn%20all%20about%20the%20rules%20of%20the%20Motorway%20and%20how%20to%20access%20the%20fast%20lane.%0A%0Ahttps%3A%2F%2Fen.wikipedia.org%2Fwiki%2FGridlock_%28Doctor_Who%29&dur=&et=20220112T190000Z&in_loc=New%20Earth&st=20220112T170000Z&title=Welcome%20to%20the%20Motorway&v=60" target="_blank" style="color: #fdfdfd; text-decoration: underline;">AOL</a> | <a href="https://calendar.yahoo.com/?desc=Learn%20all%20about%20the%20rules%20of%20the%20Motorway%20and%20how%20to%20access%20the%20fast%20lane.%0A%0Ahttps%3A%2F%2Fen.wikipedia.org%2Fwiki%2FGridlock_%28Doctor_Who%29&dur=&et=20220112T190000Z&in_loc=New%20Earth&st=20220112T170000Z&title=Welcome%20to%20the%20Motorway&v=60" target="_blank" style="color: #fdfdfd; text-decoration: underline;">Yahoo</a></span></p>
+                                      <span class="default-hide"><a href="${icalLink}" target="_blank" style="color: #fdfdfd; text-decoration: underline;">iCal file</a></span><span class="default-line">&nbsp;|&nbsp;</span><span class="outlook-hide"><a href="${outlookLink}" target="_blank" style="color: #fdfdfd; text-decoration: underline;">Outlook.com</a> </span><span class="gmail-hide">&nbsp;|&nbsp;<a href="${googleLink}" target="_blank" style="color: #fdfdfd; text-decoration: underline;">Google</a></span></p>
                               </td>
                           </tr>
-                
+
             </table>
                       <!--[if (gte mso 9)|(IE)]>
                     </td>
@@ -444,7 +441,7 @@ export const createHTML = ({
 </tr>
   </table>
 </div>
-    
+
     <!--analytics-->
 </body>
 
