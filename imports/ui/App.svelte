@@ -2,7 +2,7 @@
   import AddToCalForm from "./AddToCalForm.svelte";
   import InviteToEventForm from "./InviteToEventForm.svelte";
 
-  $m: showInvite = true;
+  $m: showInvite = false;
   const toggleInvite = () => (showInvite = !showInvite);
 </script>
 

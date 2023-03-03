@@ -10,6 +10,7 @@ import ical from "ical-generator";
 import * as postmark from "postmark";
 import { createHTML } from "./createHTML";
 import * as fs from "fs";
+import moment from 'moment-timezone';
 
 
 const createICSFile = async (start, end, title, description, location, SERVICE_EMAIL) => {
@@ -51,9 +52,25 @@ const createICSFile = async (start, end, title, description, location, SERVICE_E
 };
 
 
-export const emailInvitee = async (summary, location, description, startTimeStamp, endTimeStamp, attendees, htmlData, SERVICE_EMAIL, POSTMARK_TOKEN) => {
+export const emailInvitee = async (summary, location, description, startTimeStamp, endTimeStamp,timezone, attendees, htmlData, SERVICE_EMAIL, POSTMARK_TOKEN) => {
   try {
-    const path = await createICSFile(startTimeStamp, endTimeStamp, summary, description, location, SERVICE_EMAIL);
+    console.log("emailInvitee startTimeStamp type: ",typeof startTimeStamp);
+    console.log(startTimeStamp);
+    console.log(typeof endTimeStamp);
+
+    let sTest = startTimeStamp.replace('T', " ").slice(0, -3);
+
+    let eTest = endTimeStamp.replace('T', " ").slice(0, -3);
+    console.log(sTest, eTest);
+    console.log(typeof sTest);
+    let sSTime = moment.tz(sTest,timezone);
+    let eETime = moment.tz(eTest,timezone);
+    let sSSTime = sSTime.format();
+    let eEETime = eETime.format();
+
+
+
+    const path = await createICSFile(sSSTime, eEETime, summary, description, location, SERVICE_EMAIL);
 
     const client = new postmark.ServerClient(POSTMARK_TOKEN);
 

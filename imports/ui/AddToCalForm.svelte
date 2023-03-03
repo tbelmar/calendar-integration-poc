@@ -1,7 +1,8 @@
 <script>
   import { Facilities } from "./utils/facilitiesData";
-  import { createTimeStamps } from "./utils";
+  import { createTimeStamps, createEventLinks } from "./utils";
   import * as qs from "qs";
+  import moment from "moment-timezone";
 
   // console.log("Error Response: ", qs.parse('refresh_token=1%2F%2F06FGBqARp6BL4CgYIARAAGAYSNgF-L9IrkRqNfCKhU_XaVBgCRfjF3LaPKCDcHMOVS12GUU_OIP0yDUvF0qKebAA-PBsY8H_wDw&client_id=1071390240354-h2qj0tkgp5omhduvicda8s8r6165cmgv.apps.googleusercontent.com&client_secret=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&grant_type=refresh_token'))
 
@@ -26,6 +27,8 @@
   let startTimeStamp = "";
   let endTimeStamp = "";
   let disableButton = true;
+  let zipcode = "";
+  let timezone;
 
   $m: {
     if (selectedFacility && facilityChanged) {
@@ -38,48 +41,73 @@
       }`;
     }
     if (startTime && endTime && startDate && endDate) {
+      console.log(startTime, endTime);
       const res = createTimeStamps(startTime, endTime, startDate, endDate);
-      startTimeStamp = res.startTimeStamp;
-      endTimeStamp = res.endTimeStamp;
+
+      let newStartTimeStamp = new Date(res.startTimeStamp);
+      let newEndTimeStamp = new Date(res.endTimeStamp);
+
+      let localStartTimeStamp = moment(newStartTimeStamp).format(); //string
+      let localEndTimeStamp = moment(newEndTimeStamp).format();
+
+      startTimeStamp = localStartTimeStamp;
+      endTimeStamp = localEndTimeStamp;
+
+      const links = createEventLinks(
+        startTimeStamp,
+        endTimeStamp,
+        location,
+        description,
+        summary
+      );
+      googleLink = links.googleLink;
+      outlookLink = links.outlookLink;
     }
 
     // When all the fields are filled, create the links.
-    if (startTimeStamp && endTimeStamp && location && description && summary) {
-      console.log(String(startTime), String(endTime), String(startDate), String(endDate));
-      disableButton = false;
-      const googleObj = {
-        action: "TEMPLATE",
-        dates:
-          startTimeStamp.toISOString().replace(/([-:.])/g, "") +
-          "/" +
-          endTimeStamp.toISOString().replace(/([-:.])/g, ""),
-        details: description,
-        location,
-        text: summary,
-      };
+    // if (startTimeStamp && endTimeStamp && location && description && summary) {
+    //   // console.log(String(startTime), String(endTime), String(startDate), String(endDate));
+    //   disableButton = false;
+    //   const googleObj = {
+    //     action: "TEMPLATE",
+    //     dates:
+    //       startTimeStamp.toISOString().replace(/([-:.])/g, "") +
+    //       "/" +
+    //       endTimeStamp.toISOString().replace(/([-:.])/g, ""),
+    //     details: description,
+    //     location,
+    //     text: summary,
+    //   };
 
-      // create google link
-      googleLink =
-        "https://calendar.google.com/calendar/render?" +
-        qs.stringify(googleObj);
+    //   // create google link
+    //   googleLink =
+    //     "https://calendar.google.com/calendar/render?" +
+    //     qs.stringify(googleObj);
 
-      const outlookObj = {
-        body: description,
-        enddt: endTimeStamp.toISOString().replace(/([.])/g, ""),
-        location,
-        path: "/calendar/action/compose",
-        rru: "addevent",
-        startdt: startTimeStamp.toISOString().replace(/([.])/g, ""),
-        subject: summary,
-      };
-      // create outlook link
-      outlookLink =
-        "https://outlook.live.com/calendar/0/deeplink/compose?allday=false&" +
-        qs.stringify(outlookObj);
-    } else {
-      disableButton = true;
-    }
+    //   const outlookObj = {
+    //     body: description,
+    //     enddt: endTimeStamp.toISOString().replace(/([.])/g, ""),
+    //     location,
+    //     path: "/calendar/action/compose",
+    //     rru: "addevent",
+    //     startdt: startTimeStamp.toISOString().replace(/([.])/g, ""),
+    //     subject: summary,
+    //   };
+    //   // create outlook link
+    //   outlookLink =
+    //     "https://outlook.live.com/calendar/0/deeplink/compose?allday=false&" +
+    //     qs.stringify(outlookObj);
+    // } else {
+    //   disableButton = true;
+    // }
   }
+
+  const getTimezone = () => {
+    Meteor.call("convertZipToTimezone", zipcode, (err, res) => {
+      console.log("res:", res);
+      timezone = res;
+    });
+  };
 
   const setFacility = (name) => {
     facilityChanged = true;
@@ -91,9 +119,34 @@
       summary = "";
     }
   };
+  const outlook = "https://outlook.live.com/calendar/0/deeplink/compose?allday=false&body=Describe&enddt=2023-03-05T04%3A45%3A00%2B00%3A00&location=los%20Angeles%2C%20CA&path=%2Fcalendar%2Faction%2Fcompose&rru=addevent&startdt=2023-03-05T03%3A15%3A00%2B00%3A00&subject=Medical%20Booking";
+  console.log(outlook, qs.parse(outlook))
+
+  const google = "https://calendar.google.com/calendar/render?action=TEMPLATE&dates=20230305T031500Z%2F20230305T044500Z&details=Test&location=Los%20Angeles%2C%20California&text=Test";
+  console.log(google, qs.parse(google));
+  // console.log(qs.parse());
+  // console.log(qs.parse());
 </script>
 
+
 <div class="container">
+
+
+  
+    <!-- GOAL: {console.log(qs.parse("https://outlook.live.com/calendar/0/deeplink/compose?allday=false&body=Describe&enddt=2023-02-09T01%3A30%3A00%2B00%3A00&location=los%20Angeles%2C%20CA&path=%2Fcalendar%2Faction%2Fcompose&rru=addevent&startdt=2023-02-09T01%3A30%3A00%2B00%3A00&subject=Medical%20Booking"))} -->
+
+
+
+  <label for="zip">Zipcode:</label>
+  <input
+    bind:value={zipcode}
+    id="zip"
+    class="cal-field"
+    type="text"
+    placeholder="XXXXXX"
+  />
+  <button on:click={getTimezone}>Submit</button>
+
   <label for="facilities-list">Select a Facility</label>
   <select
     on:change={(e) => setFacility(e.target.value)}
@@ -164,20 +217,6 @@
       id="end-time"
     />
   </div>
-
-  <a
-    href={disableButton ? "#" : googleLink}
-    rel="noreferrer"
-    target="_blank"
-    class="addToCalendar">Add to Google Calendar</a
-  >
-  <a
-    href={disableButton ? "#" : outlookLink}
-    rel="noreferrer"
-    target="_blank"
-    on:click={() => console.log(outlookLink)}
-    class="addToCalendar">Add to Outlook Calendar</a
-  >
 
   <br />
   Google:{googleLink}

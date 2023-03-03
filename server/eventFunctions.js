@@ -3,9 +3,11 @@ import { google } from "googleapis";
 import { authorize } from "./authentication";
 import { emailInvitee } from "./postmark";
 import * as zipcode_to_timezone from 'zipcode-to-timezone';
+import moment from 'moment-timezone';
 // import { ZipToTz } from 'zip-to-timezone';
 const { lookup } = require('zip2tz');
 // let zipcode_to_timezone = require( 'zipcode-to-timezone' );
+
 
 Meteor.methods({
   async "event.create"(summary, location, description, startTimeStamp, endTimeStamp, timeZone, attendees, htmlData) {
@@ -36,7 +38,7 @@ Meteor.methods({
         calendarId: 'primary',
         resource: event,
       });
-      // emailInvitee(summary, location, description, startTimeStamp, endTimeStamp, attendees, htmlData)
+      emailInvitee(summary, location, description, startTimeStamp, endTimeStamp,timeZone, attendees, htmlData, SERVICE_EMAIL, POSTMARK_TOKEN);
       return res.data.htmlLink;
     } catch (error) {
       console.log("Error in event.create: ", error);
@@ -46,9 +48,8 @@ Meteor.methods({
 
   async "event.email"(summary, location, description, startTimeStamp, endTimeStamp, attendees, htmlData) {
     try {
-
-      const { POSTMARK_TOKEN, SERVICE_EMAIL } = process.env;
-      emailInvitee(summary, location, description, startTimeStamp, endTimeStamp, attendees, htmlData, SERVICE_EMAIL, POSTMARK_TOKEN);
+      // const { POSTMARK_TOKEN, SERVICE_EMAIL } = process.env;
+      emailInvitee(summary, location, description, startTimeStamp, endTimeStamp, timeZone,attendees, htmlData, SERVICE_EMAIL, POSTMARK_TOKEN);
       return 'Success';
     } catch (error) {
       console.log("Error in event.email: ", error);

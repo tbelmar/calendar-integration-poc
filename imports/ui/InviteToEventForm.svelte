@@ -3,6 +3,7 @@
   import { Facilities } from "./utils/facilitiesData";
   import { createEventLinks, createTimeStamps, getMonthString } from "./utils";
   import moment from "moment-timezone";
+
   // var zipcode_to_timezone = require( 'zipcode-to-timezone' );
   // import * as zipcode_to_timezone from 'zipcode-to-timezone';
   // import * as qs from "qs";
@@ -17,8 +18,15 @@
   let endDate = "";
   let invitee = "";
   let attendees = [
-    { email: "daurham95@gmail.com" },
+    { email: "daurham95@gmail.com"},
     { email: "jlin2744@gmail.com" },
+    { email: "jimlee827@yahoo.com" },
+    { email: "tacocat1928@outlook.com" },
+    { email: "actualfooddevs@gmail.com" },
+    { email: "actualfooddevs@outlook.com" },
+    { email: "actualfooddevs@yahoo.com" },
+    { email: "actualfooddevs@aol.com" },
+    { email: "daurham95@icloud.com" },
   ];
   let facilityChanged = false;
   let link = "";
@@ -80,6 +88,10 @@
       // let timeZone =
         // "America/" + selectedFacility.address.city.replace(/([" "])/g, "_");
 
+        // TODO
+        // make startTime string a new Date to adhere to timezone first
+        // then turn it back to original string format to create timeStamps 
+        // lastly pass that into the createTimeStamps function and also console.log to see if youre getting the correct date and time based off of timezone.
       const { startTimeStamp, endTimeStamp } = createTimeStamps(
         startTime,
         endTime,
@@ -87,8 +99,19 @@
         endDate
       );
 
+      console.log(typeof startTimeStamp)
+
+      let newStartTimeStamp = new Date(startTimeStamp);
+      let newEndTimeStamp = new Date(endTimeStamp);
+      
+      let localStartTimeStamp = moment(newStartTimeStamp).format();//string
+      let localEndTimeStamp = moment(newEndTimeStamp).format();
+      console.log("newStartTimeStamp",localStartTimeStamp);
+
       const startTimeStampStr = startTimeStamp.toISOString();
       const endTimeStampStr = endTimeStamp.toISOString();
+
+      
       const links = createEventLinks(
         startTimeStampStr,
         endTimeStampStr,
@@ -104,24 +127,29 @@
         inviteDayOfMonth: startTimeStamp.getDate(),
         ...links,
       };
-      const startStampString = startTimeStamp.toISOString().slice(0, -5);
-      const endStampString = endTimeStamp.toISOString().slice(0, -5);
-      "America/Los_Angeles",
+      let startStampString = startTimeStamp.toISOString().slice(0, -5);
+      let endStampString = endTimeStamp.toISOString().slice(0, -5);
       console.log('start:', startStampString);
       console.log('end:', endStampString);
 
+      let testStartStampString = localStartTimeStamp.slice(0,-6);
+      let testEndStampString = localEndTimeStamp.slice(0,-6);
+
+      console.log("Test Start time string:", testStartStampString);
+      console.log("Test End time string:", testEndStampString);
+
       // const stz = moment.tz(startTimeStamp, timezone);
-      const stz = moment.tz(startStampString, timezone);
+
       // const etz = moment.tz(endTimeStamp, timezone);
-      const etz = moment.tz(endStampString, timezone);
-      console.log(stz.format());
-      console.log(etz.format());
 
-      const s = stz.format().split().splice(1, -4, "0")
-      console.log(s);
+      // console.log(stz.format());
+      // console.log(etz.format());
 
-      console.log('utc:',stz.utc().format()) // utc: 2023-03-03T03:08:00Z
-      console.log('utc:',etz.utc().format()) // utc: 2023-03-03T03:08:00Z
+      // const s = stz.format().split().splice(1, -4, "0")
+      // console.log(s);
+
+      // console.log('utc:',stz.utc().format()) // utc: 2023-03-03T03:08:00Z
+      // console.log('utc:',etz.utc().format()) // utc: 2023-03-03T03:08:00Z
 
 
       const eventLink = await Meteor.callAsync(
@@ -137,8 +165,8 @@
         // startStampString + "Z",
         // endStampString + "Z",
         // stz.utc().format(),
-        '2023-03-03T09:00:00-07:00',
-        '2023-03-03T09:00:00-07:00',
+        testStartStampString,
+        testEndStampString,
         // stz.format() + "Z",
         // etz.utc().format(),
         // etz.format() + "Z",
@@ -146,7 +174,7 @@
         // "",
         // timezone,
         // "America/New_York",
-        "America/Los_Angeles",
+        timezone,
         attendees,
         htmlData
       );

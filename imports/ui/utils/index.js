@@ -54,7 +54,7 @@ export const createTimeStamps = (startTime, endTime, startDate, endDate) => {
 };
 
 
-export const createEventLinks = (startTimeStamp, endTimeStamp, location, description, summary) => {
+export const createEventLinks = (startTimeStamp, endTimeStamp, location, description, summary, timezone) => {
 
   const googleObj = {
     action: "TEMPLATE",
@@ -65,6 +65,7 @@ export const createEventLinks = (startTimeStamp, endTimeStamp, location, descrip
     details: description,
     location,
     text: summary,
+    timeZone: timezone,
   };
 
   // create google link
@@ -80,6 +81,7 @@ export const createEventLinks = (startTimeStamp, endTimeStamp, location, descrip
     startdt: startTimeStamp.replace(/([.])/g, ""),
     subject: summary,
     allday: false,
+    timeZone: timezone,
   };
   // create outlook link
   const outlookLink =

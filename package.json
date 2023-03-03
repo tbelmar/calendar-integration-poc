@@ -16,6 +16,7 @@
     "googleapis": "^105.0.0",
     "ical-generator": "^3.6.1",
     "meteor-node-stubs": "^1.2.5",
+    "moment": "^2.29.4",
     "moment-timezone": "^0.5.41",
     "nodemailer": "^6.9.1",
     "postmark": "^3.0.15",
